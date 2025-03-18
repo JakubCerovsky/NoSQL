@@ -1,0 +1,61 @@
+{
+  "_id": { "$oid": "5fdedb7c25ab1352eef88f60" },
+  "asin": "example",
+  "title": "example",
+  "description": "example",
+  "language": "example",
+  "publish_date": { "$date": "2023-02-20T14:22:40.511Z" },
+  "publisher": "example",
+  "page_count": 1000,
+  "noOf_copies": 1000,
+  "price": { "$numberDecimal": "123.456" },
+  "authors": [
+    {
+      "first_name": "John",
+      "last_name": "Doe",
+      "biography": "Big writer.."
+    }
+  ],
+  "categories": [
+    { 
+      "category_id": { "$oid": "65f8cc7b6e79a8d91d3fbb24" }
+    },
+    { 
+      "category_id": { "$oid": "65f8cc7b6e79a8d91d3fbb26" }
+    },
+    { 
+      "category_id": { "$oid": "65f8cc7b6e79a8d91d3fbb27" }
+    }
+  ],
+  "genres": [
+    { 
+      "name": "Science Fiction",
+      "categories": [
+        { 
+          "category_id": { "$oid": "65f8cc7b6e79a8d91d3fbb29" }
+        },
+        { 
+          "category_id": { "$oid": "65f8cc7b6e79a8d91d3fbb30" }
+        }
+      ]
+    }
+  ],
+  "characters": [
+    {
+      "name": "Dragon",
+      "categories": [
+        { 
+          "category_id": { "$oid": "65f8cc7b6e79a8d91d3fbb26" }
+        },
+        { 
+          "category_id": { "$oid": "65f8cc7b6e79a8d91d3fbb29" }
+        }
+      ],
+      "books": [
+        { 
+          "book_id": { "$oid": "5fdedb7c25ab1352eef88f60" }
+        }
+      ]
+    }
+  ]
+}

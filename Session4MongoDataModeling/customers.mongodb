@@ -1,0 +1,52 @@
+db.createCollection("customers", {
+    validator: {
+       $jsonSchema: {
+          bsonType: "object",
+          required: ["email", "first_name", "last_name", "country", "city", "street", "house_no", "post_no", "orders"],
+          properties: {
+             email: {
+                bsonType: "string",
+                description: "Customer's email address",
+                pattern: "^.+@.+\\..+$"  // Ensuring the format is valid email
+             },
+             first_name: {
+                bsonType: "string",
+                description: "Customer's first name"
+             },
+             last_name: {
+                bsonType: "string",
+                description: "Customer's last name"
+             },
+             country: {
+                bsonType: "string",
+                description: "Customer's country"
+             },
+             city: {
+                bsonType: "string",
+                description: "Customer's city"
+             },
+             street: {
+                bsonType: "string",
+                description: "Customer's street address"
+             },
+             house_no: {
+                bsonType: "string",
+                description: "Customer's house number"
+             },
+             post_no: {
+                bsonType: "string",
+                description: "Customer's postal code"
+             },
+             orders: {
+                bsonType: "array",
+                items: {
+                   bsonType: "objectId",
+                   description: "References to order documents placed by the customer"
+                },
+                description: "List of order references placed by the customer"
+             }
+          }
+       }
+    }
+ });
+ 

@@ -1,0 +1,120 @@
+db.createCollection("books", {
+    validator: {
+       $jsonSchema: {
+          bsonType: "object",
+          required: ["asin", "title", "description", "language", "publish_date", "publisher", "page_count", "noOf_copies", "price", "authors", "categories", "characters"],
+          properties: {
+             asin: {
+                bsonType: "string",
+                description: "ASIN of the book"
+             },
+             title: {
+                bsonType: "string",
+                description: "Title of the book"
+             },
+             description: {
+                bsonType: "string",
+                description: "Description of the book"
+             },
+             language: {
+                bsonType: "string",
+                description: "Language of the book"
+             },
+             publish_date: {
+                bsonType: "date",
+                description: "Publish date of the book"
+             },
+             publisher: {
+                bsonType: "string",
+                description: "Publisher of the book"
+             },
+             page_count: {
+                bsonType: "int",
+                description: "Number of pages in the book"
+             },
+             noOf_copies: {
+                bsonType: "int",
+                description: "Number of copies available"
+             },
+             price: {
+                bsonType: "decimal",
+                description: "Price of the book"
+             },
+             authors: {
+                bsonType: "array",
+                minItems: 1,
+                uniqueItems: true,
+                items: {
+                   bsonType: "object",
+                   required: ["first_name", "last_name", "biography"],
+                   properties: {
+                      first_name: {
+                         bsonType: "string",
+                         description: "First name of the author"
+                      },
+                      last_name: {
+                         bsonType: "string",
+                         description: "Last name of the author"
+                      },
+                      biography: {
+                         bsonType: "string",
+                         description: "Biography of the author"
+                      }
+                   }
+                }
+             },
+             categories: {
+                bsonType: "array",
+                items: {
+                   bsonType: "object",
+                   required: ["category_id"],
+                   properties: {
+                      category_id: {
+                         bsonType: "objectId",
+                         description: "Reference to category"
+                      }
+                   }
+                }
+             },
+             characters: {
+                bsonType: "array",
+                items: {
+                   bsonType: "object",
+                   required: ["name", "categories", "books"],
+                   properties: {
+                      name: {
+                         bsonType: "string",
+                         description: "Name of the character"
+                      },
+                      categories: {
+                         bsonType: "array",
+                         items: {
+                            bsonType: "objectId",
+                            description: "Reference to category"
+                         }
+                      },
+                      books: {
+                         bsonType: "array",
+                         items: {
+                            bsonType: "object",
+                            required: ["book_id", "title"],
+                            properties: {
+                               book_id: {
+                                  bsonType: "objectId",
+                                  description: "Reference to book"
+                               },
+                               title: {
+                                  bsonType: "string",
+                                  description: "Title of the book the character appears in"
+                               }
+                            }
+                         }
+                      }
+                   }
+                }
+             }
+          }
+       }
+    }
+ });
+ 

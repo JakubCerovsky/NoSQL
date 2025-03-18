@@ -1,0 +1,13 @@
+{
+  "_id": { "$oid": "5fdedb7c25ab1352eef88f60" },
+  "email": "example",
+  "first_name": "example",
+  "last_name": "example",
+  "country": "example",
+  "city": "example",
+  "street": "example",
+  "house_no": "example",
+  "post_no": "example",
+  "orders": [ { "$oid": "65f8cba26e79a8d91d3fbb24" } ] 
+}
+  

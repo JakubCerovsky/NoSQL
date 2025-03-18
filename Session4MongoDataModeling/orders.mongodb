@@ -1,0 +1,47 @@
+db.createCollection("orders", {
+    validator: {
+       $jsonSchema: {
+          bsonType: "object",
+          required: ["customer_id", "date", "total_cost", "status", "order_items"],
+          properties: {
+             customer_id: {
+                bsonType: "objectId",
+                description: "Reference to the customer who placed the order"
+             },
+             date: {
+                bsonType: "date",
+                description: "The date when the order was placed"
+             },
+             total_cost: {
+                bsonType: "decimal",
+                description: "Total cost of the order"
+             },
+             status: {
+                bsonType: "string",
+                enum: ["pending", "shipped", "delivered", "canceled"],
+                description: "Status of the order"
+             },
+             order_items: {
+                bsonType: "array",
+                items: {
+                   bsonType: "object",
+                   required: ["book_id", "quantity"],
+                   properties: {
+                      book_id: {
+                         bsonType: "objectId",
+                         description: "Reference to the book being ordered"
+                      },
+                      quantity: {
+                         bsonType: "int",
+                         description: "The quantity of the book ordered",
+                         minimum: 1
+                      }
+                   }
+                },
+                description: "Array of items in the order, with book references and quantity"
+             }
+          }
+       }
+    }
+ });
+ 

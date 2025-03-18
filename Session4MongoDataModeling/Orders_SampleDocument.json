@@ -1,0 +1,17 @@
+{
+    "_id": { "$oid": "65f8cba26e79a8d91d3fbb24" },
+    "customer_id": { "$oid": "5fdedb7c25ab1352eef88f60" },
+    "date": { "$date": "2023-02-20T14:22:40.511Z" },
+    "total_cost": { "$numberDecimal": "123.456" },
+    "status": "example",
+    "order_items": [
+      {
+        "book_id": { "$oid": "5fdedb7c25ab1352eef88f61" },
+        "quantity": 2
+      },
+      {
+        "book_id": { "$oid": "5fdedb7c25ab1352eef88f62" },
+        "quantity": 1
+      }
+    ]
+}
