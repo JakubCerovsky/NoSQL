@@ -2,24 +2,25 @@
     "_id": { "$oid": "65f8cc7b6e79a8d91d3fbb24" },
     "title": "example",
     "description": "example",
-    "parent_category": null,
+    "parent_id": null,
     "sub_categories": [
         {
-          "_id": { "$oid": "65f8cc7b6e79a8d91d3fbb26" },
+          "parent_id": { "$oid": "65f8cc7b6e79a8d91d3fbb26" },
           "title": "example"
         },
         {
-          "_id": { "$oid": "65f8cc7b6e79a8d91d3fbb27" },
+          "parent_id": { "$oid": "65f8cc7b6e79a8d91d3fbb27" },
           "title": "example"
         }
     ],
+    "book_count": 2,
     "books": [
       {
-        "_id": { "$oid": "65f8cc7b6e79a8d91d3fbb70" },
+        "book_id": { "$oid": "65f8cc7b6e79a8d91d3fbb70" },
         "title": "example"
       },
       {
-        "_id": { "$oid": "65f8cc7b6e79a8d91d3fbb20" },
+        "book_id": { "$oid": "65f8cc7b6e79a8d91d3fbb20" },
         "title": "example"
       }
     ],

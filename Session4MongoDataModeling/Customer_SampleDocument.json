@@ -11,7 +11,7 @@
     "post_no": "example"
   },
   "orders": [ {
-    "_id": { "$oid": "65f8cba26e79a8d91d3fbb24" },
+    "order_id": { "$oid": "65f8cba26e79a8d91d3fbb24" },
     "total_price": { "$numberDecimal": "123.456" }
     } 
   ] 

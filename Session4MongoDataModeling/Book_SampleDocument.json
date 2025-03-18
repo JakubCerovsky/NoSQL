@@ -17,9 +17,14 @@
     }
   ],
   "categories": [
-    { "$oid": "65f8cc7b6e79a8d91d3fbb24" },
-    { "$oid": "65f8cc7b6e79a8d91d3fbb26" },
-    { "$oid": "65f8cc7b6e79a8d91d3fbb27" }
+    {
+      "category_id": { "$oid": "65f8cc7b6e79a8d91d3fbb26" },
+      "title": "example"
+    },
+    {
+      "category_id": { "$oid": "65f8cc7b6e79a8d91d3fbb27" },
+      "title": "example"
+    }
   ],
   "genres": [
     "Science Fiction"
