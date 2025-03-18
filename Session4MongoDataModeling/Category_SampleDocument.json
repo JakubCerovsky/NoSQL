@@ -1,30 +1,32 @@
 {
     "_id": { "$oid": "65f8cc7b6e79a8d91d3fbb24" },
-    "title": "Books",
-    "description": "All books",
+    "title": "example",
+    "description": "example",
     "parent_category": null,
-    "ancestor_categories": [],
-    "subcategories": [
+    "sub_categories": [
+        {
+          "_id": { "$oid": "65f8cc7b6e79a8d91d3fbb26" },
+          "title": "example"
+        },
+        {
+          "_id": { "$oid": "65f8cc7b6e79a8d91d3fbb27" },
+          "title": "example"
+        }
+    ],
+    "books": [
       {
-        "_id": { "$oid": "65f8cc7b6e79a8d91d3fbb26" },
-        "title": "Programming",
-        "description": "Books about coding",
-        "parent_category": { "$oid": "65f8cc7b6e79a8d91d3fbb24" },
-        "ancestor_categories": [
-          { "$oid": "65f8cc7b6e79a8d91d3fbb24" }
-        ],
-        "subcategories": [
-          {
-            "_id": { "$oid": "65f8cc7b6e79a8d91d3fbb27" },
-            "title": "Web Development",
-            "description": "Books about building websites",
-            "parent_category": { "$oid": "65f8cc7b6e79a8d91d3fbb26" },
-            "ancestor_categories": [
-              { "$oid": "65f8cc7b6e79a8d91d3fbb24" },
-              { "$oid": "65f8cc7b6e79a8d91d3fbb26" }
-            ]
-          }
-        ]
+        "_id": { "$oid": "65f8cc7b6e79a8d91d3fbb70" },
+        "title": "example"
+      },
+      {
+        "_id": { "$oid": "65f8cc7b6e79a8d91d3fbb20" },
+        "title": "example"
       }
+    ],
+    "genres": [
+      "example"
+    ],
+    "characters": [
+       "example"
     ]
-  }
+}
