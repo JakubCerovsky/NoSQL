@@ -1,65 +1,39 @@
 db.createCollection("categories", {
-    validator: {
-       $jsonSchema: {
-          bsonType: "object",
-          required: ["title", "description", "parent_category", "ancestor_categories", "subcategories"],
-          properties: {
-             title: {
-                bsonType: "string",
-                description: "Title of the category"
-             },
-             description: {
-                bsonType: "string",
-                description: "Description of the category"
-             },
-             parent_category: {
-                bsonType: "objectId",
-                description: "Reference to the parent category (null if top-level)"
-             },
-             ancestor_categories: {
-                bsonType: "array",
-                items: {
-                   bsonType: "objectId",
-                   description: "Reference to ancestor categories"
-                },
-                description: "List of ancestor category IDs"
-             },
-             subcategories: {
-                bsonType: "array",
-                items: {
-                   bsonType: "object",
-                   required: ["_id", "title", "description", "parent_category", "ancestor_categories"],
-                   properties: {
-                      _id: {
-                         bsonType: "objectId",
-                         description: "ID of the subcategory"
-                      },
-                      title: {
-                         bsonType: "string",
-                         description: "Title of the subcategory"
-                      },
-                      description: {
-                         bsonType: "string",
-                         description: "Description of the subcategory"
-                      },
-                      parent_category: {
-                         bsonType: "objectId",
-                         description: "Reference to the parent category"
-                      },
-                      ancestor_categories: {
-                         bsonType: "array",
-                         items: {
-                            bsonType: "objectId",
-                            description: "Reference to ancestor categories"
-                         },
-                         description: "List of ancestor category IDs for the subcategory"
-                      }
-                   }
-                },
-                description: "List of subcategories under this category"
-             }
-          }
-       }
-    }
- });
- 
+   validator: {
+      $jsonSchema: {
+         bsonType: "object",
+         required: ["title", "parent_id"],
+         properties: {
+            title: {
+               bsonType: "string",
+               description: "Title of the category"
+            },
+            description: {
+               bsonType: "string",
+               description: "Description of the category"
+            },
+            parent_id: {
+               bsonType: "objectId",
+               description: "Reference to the parent category"
+            },
+            sub_categories: {
+               bsonType: "array",
+               items: {
+                  bsonType: "object",
+                  required: ["parent_id", "title"],
+                  properties: {
+                     parent_id: {
+                        bsonType: "objectId",
+                        description: "Reference to the parent category"
+                     },
+                     title: {
+                        bsonType: "string",
+                        description: "Title of the subcategory"
+                     }
+                  }
+               }
+            }
+         }
+      }
+   }
+})
