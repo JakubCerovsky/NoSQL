@@ -1,0 +1,46 @@
+db.createCollection("orders", {
+  validator: {
+    $jsonSchema: {
+      bsonType: "object",
+      required: ["customer_id", "date", "total_price", "order_details"],
+      properties: {
+        customer_id: {
+          bsonType: "objectId",
+          description: "Reference to the customer document",
+        },
+        date: {
+          bsonType: "date",
+          description: "The date when the order was placed",
+        },
+        total_price: {
+          bsonType: "decimal",
+          description: "Total price of the order",
+        },
+        order_details: {
+          bsonType: "array",
+          minItems: 1,
+          items: {
+            bsonType: "object",
+            required: ["book_id", "quantity", "price"],
+            properties: {
+              book_id: {
+                bsonType: "objectId",
+                description: "Reference to the book document",
+              },
+              quantity: {
+                bsonType: "int",
+                description: "Number of copies of the book ordered",
+              },
+              price: {
+                bsonType: "decimal",
+                description: "Price of a single book",
+              },
+            },
+          },
+        },
+      },
+    },
+  },
+});
+
+db.orders.createIndex({ customer_id: 1 });

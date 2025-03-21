@@ -1,0 +1,67 @@
+db.createCollection("customers", {
+  validator: {
+    $jsonSchema: {
+      bsonType: "object",
+      required: ["email", "first_name", "last_name", "address"],
+      properties: {
+        email: {
+          bsonType: "string",
+          description: "Email address of the customer",
+        },
+        first_name: {
+          bsonType: "string",
+          description: "First name of the customer",
+        },
+        last_name: {
+          bsonType: "string",
+          description: "Last name of the customer",
+        },
+        address: {
+          bsonType: "object",
+          required: ["country", "city", "street", "house_no", "post_no"],
+          properties: {
+            country: {
+              bsonType: "string",
+              description: "Country of the customer",
+            },
+            city: {
+              bsonType: "string",
+              description: "City of the customer",
+            },
+            street: {
+              bsonType: "string",
+              description: "Street of the customer",
+            },
+            house_no: {
+              bsonType: "string",
+              description: "House number of the customer",
+            },
+            post_no: {
+              bsonType: "string",
+              description: "Postal code of the customer",
+            },
+          },
+        },
+        orders: {
+          bsonType: "array",
+          items: {
+            bsonType: "object",
+            required: ["order_id", "total_price"],
+            properties: {
+              order_id: {
+                bsonType: "objectId",
+                description: "Reference to the order document",
+              },
+              total_price: {
+                bsonType: "decimal",
+                description: "Total price of the order",
+              },
+            },
+          },
+        },
+      },
+    },
+  },
+});
+
+db.customers.createIndex({ email: 1 }, { unique: true });

@@ -1,0 +1,60 @@
+type Book {
+  id: ID!
+  asin: String!
+  title: String!
+  description: String
+  price: Float!
+  authors: [Author!]! @relationship(type: "WROTE", direction: IN)
+  categories: [Category!]! @relationship(type: "BELONGS_TO", direction: OUT)
+}
+
+type Author {
+  id: ID!
+  first_name: String!
+  last_name: String!
+  books: [Book!]! @relationship(type: "WROTE", direction: OUT)
+}
+
+type Category {
+  id: ID!
+  title: String!
+  books: [Book!]! @relationship(type: "BELONGS_TO", direction: IN)
+}
+
+type Customer {
+  id: ID!
+  email: String!
+  first_name: String!
+  last_name: String!
+  orders: [Order!]! @relationship(type: "MADE_BY", direction: IN)
+}
+
+type Order {
+  id: ID!
+  customer: Customer! @relationship(type: "MADE_BY", direction: OUT)
+  date: String!
+  order_details: [OrderDetail!]! @relationship(type: "CONTAINS", direction: OUT)
+  total_price: Float!
+}
+
+type OrderDetail {
+  book: Book! @relationship(type: "INCLUDES", direction: OUT)
+  quantity: Int!
+  price: Float!
+}
+
+type Query {
+  # 1. Search for books by title
+  searchBooks(searchTerm: String!): [Book!]!
+
+  # 2. Get orders by customer email (with number of books and total price)
+  customerOrders(email: String!): [Order!]!
+}
+
+type Mutation {
+  # 3. Create an order for a single book and a customer (1-click order)
+  createOrder(customerEmail: String!, bookId: ID!, quantity: Int!): Order!
+
+  # 4. Apply a percentage discount on a book
+  applyDiscount(bookId: ID!, percentage: Float!): Book!
+}

@@ -1,0 +1,91 @@
+// Modifying data
+
+// 1. Sell a book to a customer.
+
+db.orders.insertOne({
+  customer_id: ObjectId("5f5f3b3b3b3b3b3b3b3b3b3b"), // Correct reference
+  date: new Date(),
+  order_details: [
+    {
+      book_id: ObjectId("60d5f3b3b3b3b3b3b3b3b3b3"), // Correct reference
+      quantity: 1,
+      price: 7.99, // Price of a single book
+    },
+  ],
+  total_price: 7.99,
+});
+
+// 2. Change the address of a customer.
+
+db.customers.updateOne(
+  { email: "johndoe@example.com" },
+  { $set: { "address.city": "Horsens" } }
+);
+
+// 3. Add an author to a book.
+
+db.books.update(
+  { asin: "978-0553293357" }, // Correct reference
+  { $push: { authors: { first_name: "John", last_name: "Doe" } } }
+);
+
+// 4. Retire the "Space Opera" category and assign all books from that category to the parent category. Don't assume you know the id of the parent category.
+
+const session = db.getMongo().startSession();
+session.startTransaction();
+
+try {
+  const db = session.getDatabase("amazon_bookstore_mongov2");
+  // Step 1: Find the "Space Opera" category
+  var spaceOpera = db.categories.findOne({ title: "Space Opera" });
+
+  if (!spaceOpera) {
+    throw new Error("Space Opera category not found");
+  }
+
+  // Step 2: Find the parent category
+  var parentCategory = db.categories.findOne({ _id: spaceOpera.parent_id });
+
+  if (!parentCategory) {
+    throw new Error("Parent category not found");
+  }
+
+  // Step 3: Update books to replace "Space Opera" with its parent category
+  db.books.updateMany(
+    { "categories.category_id": spaceOpera._id },
+    { $set: { "categories.$.category_id": parentCategory._id } }
+  );
+
+  // Step 4: Delete the "Space Opera" category
+  db.categories.deleteOne({ _id: spaceOpera._id });
+
+  // Step 5: Commit the transaction
+  session.commitTransaction();
+  print("Transaction committed successfully!");
+} catch (error) {
+  // If anything fails, abort the transaction
+  session.abortTransaction();
+  print("Transaction aborted: " + error.message);
+} finally {
+  session.endSession();
+}
+
+// 5. Sell 3 copies of one book and 2 of another in a single order
+
+db.orders.insertOne({
+  customer_id: ObjectId("5f5f3b3b3b3b3b3b3b3b3b3b"), // Correct reference
+  date: new Date(),
+  order_details: [
+    {
+      book_id: ObjectId("60d5f3b3b3b3b3b3b3b3b3b3"), // Correct reference
+      quantity: 3,
+      price: 7.99,
+    },
+    {
+      book_id: ObjectId("60d5f3b3b3b3b3b3b3b3b3b4"), // Correct reference
+      quantity: 2,
+      price: 7.99,
+    },
+  ],
+  total_price: 3 * 7.99 + 2 * 7.99,
+});

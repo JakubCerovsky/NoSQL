@@ -8,7 +8,7 @@
   "publisher": "example",
   "page_count": 1000,
   "no_of_copies": 1000,
-  "sold_copies" : 0,
+  "sold_copies": 0,
   "price": { "$numberDecimal": "123.456" },
   "authors": [
     {
@@ -27,10 +27,6 @@
       "title": "example"
     }
   ],
-  "genres": [
-    "Science Fiction"
-  ],
-  "characters": [
-     "Dragon"
-  ]
+  "genres": ["example", "example"],
+  "characters": ["example"]
 }

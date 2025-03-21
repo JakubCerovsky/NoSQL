@@ -3,17 +3,17 @@
   "email": "example",
   "first_name": "example",
   "last_name": "example",
-  "address": {  
+  "address": {
     "country": "example",
     "city": "example",
     "street": "example",
     "house_no": "example",
     "post_no": "example"
   },
-  "orders": [ {
-    "order_id": { "$oid": "65f8cba26e79a8d91d3fbb24" },
-    "total_price": { "$numberDecimal": "123.456" }
-    } 
-  ] 
+  "orders": [
+    {
+      "order_id": { "$oid": "65f8cba26e79a8d91d3fbb24" },
+      "total_price": { "$numberDecimal": "123.456" }
+    }
+  ]
 }
-  

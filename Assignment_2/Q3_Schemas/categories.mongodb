@@ -1,0 +1,41 @@
+db.createCollection("categories", {
+  validator: {
+    $jsonSchema: {
+      bsonType: "object",
+      required: ["title", "parent_id"],
+      properties: {
+        title: {
+          bsonType: "string",
+          description: "Title of the category",
+        },
+        description: {
+          bsonType: "string",
+          description: "Description of the category",
+        },
+        parent_id: {
+          bsonType: "objectId",
+          description: "Reference to the parent category",
+        },
+        sub_categories: {
+          bsonType: "array",
+          items: {
+            bsonType: "object",
+            required: ["parent_id", "title"],
+            properties: {
+              parent_id: {
+                bsonType: "objectId",
+                description: "Reference to the parent category",
+              },
+              title: {
+                bsonType: "string",
+                description: "Title of the subcategory",
+              },
+            },
+          },
+        },
+      },
+    },
+  },
+});
+
+db.categories.createIndex({ title: 1 }, { unique: true });
