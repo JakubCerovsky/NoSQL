@@ -1,0 +1,39 @@
+[
+    {
+      "email": "alice@example.com",
+      "first_name": "Alice",
+      "last_name": "Johnson",
+      "address": {
+        "country": "USA",
+        "city": "New York",
+        "street": "5th Avenue",
+        "house_no": "101",
+        "post_no": "10001"
+      },
+      "orders": [
+        {
+          "order_id": "603d2f6b7317d312b547c3f9",
+          "total_price": 39.98
+        }
+      ]
+    },
+    {
+      "email": "bob@example.com",
+      "first_name": "Bob",
+      "last_name": "Williams",
+      "address": {
+        "country": "Canada",
+        "city": "Toronto",
+        "street": "King Street",
+        "house_no": "202",
+        "post_no": "M5A 1A1"
+      },
+      "orders": [
+        {
+          "order_id": "603d2f6b7317d312b547c3fa",
+          "total_price": 99.98
+        }
+      ]
+    }
+  ]
+  

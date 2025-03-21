@@ -2,7 +2,7 @@
 // MongoDB Playground
 // Use Ctrl+Space inside a snippet or a string literal to trigger completions.
 
-const database = 'amazon_bookstore_mongov1';
+const database = 'amazon_bookstore_mongov2';
 
 
 // The current database to use.

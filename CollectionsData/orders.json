@@ -1,0 +1,27 @@
+[
+    {
+      "customer_id": "603d2f6b7317d312b547c3fb",
+      "date": "2025-03-21T00:00:00Z",
+      "total_price": 39.98,
+      "order_details": [
+        {
+          "book_id": "603d2f6b7317d312b547c3fc",
+          "quantity": 2,
+          "price": 19.99
+        }
+      ]
+    },
+    {
+      "customer_id": "603d2f6b7317d312b547c3fd",
+      "date": "2025-03-20T00:00:00Z",
+      "total_price": 99.98,
+      "order_details": [
+        {
+          "book_id": "603d2f6b7317d312b547c3fe",
+          "quantity": 2,
+          "price": 49.99
+        }
+      ]
+    }
+  ]
+  

@@ -36,6 +36,10 @@ db.createCollection("books", {
                bsonType: "int",
                description: "The number of copies available"
             },
+            sold_copies: {
+               bsonType: "int",
+               description: "The number of sold copies in total"
+            },
             price: {
                bsonType: "decimal",
                description: "The price of the book"

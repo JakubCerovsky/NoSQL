@@ -1,0 +1,57 @@
+[
+    {
+      "asin": "B0001A1B2C",
+      "title": "The Adventure of Sherlock Holmes",
+      "description": "A collection of short stories featuring the famous detective Sherlock Holmes.",
+      "language": "English",
+      "publish_date": { "$date": "2020-05-12T00:00:00Z" },
+      "publisher": "Fiction House",
+      "page_count": 350,
+      "no_of_copies": 100,
+      "sold_copies": 45,
+      "price": { "$numberDecimal": "19.99" },
+      "authors": [
+        {
+          "first_name": "Arthur",
+          "last_name": "Conan Doyle",
+          "biography": "A British writer, best known for creating the detective Sherlock Holmes."
+        }
+      ],
+      "categories": [
+        {
+          "category_id": { "$oid": "603d2f6b7317d312b547c3f7" },
+          "title": "Mystery"
+        }
+      ],
+      "genres": ["Mystery", "Detective", "Crime"],
+      "characters": ["Sherlock Holmes", "Dr. Watson"]
+    },
+    {
+      "asin": "B0002D4F5G",
+      "title": "Introduction to Machine Learning",
+      "description": "A comprehensive guide to the principles and applications of machine learning.",
+      "language": "English",
+      "publish_date": { "$date": "2022-08-25T00:00:00Z" },
+      "publisher": "Tech Books",
+      "page_count": 450,
+      "no_of_copies": 150,
+      "sold_copies": 90,
+      "price": { "$numberDecimal": "49.99" },
+      "authors": [
+        {
+          "first_name": "John",
+          "last_name": "Smith",
+          "biography": "An expert in machine learning and AI research."
+        }
+      ],
+      "categories": [
+        {
+          "category_id": { "$oid": "603d2f6b7317d312b547c3f8" },
+          "title": "Technology"
+        }
+      ],
+      "genres": ["Technology", "Education", "Machine Learning"],
+      "characters": []
+    }
+  ]
+  
