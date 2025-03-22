@@ -1,3 +1,5 @@
+# 1. Create schema definitions
+# 2. Add relationships
 type Book {
   id: ID!
   asin: String!
@@ -43,18 +45,20 @@ type OrderDetail {
   price: Float!
 }
 
+# 3. Define queries
 type Query {
-  # 1. Search for books by title
+  # 3a. Search for books by title
   searchBooks(searchTerm: String!): [Book!]!
 
-  # 2. Get orders by customer email (with number of books and total price)
+  # 3b. Get orders by customer email (with number of books and total price)
   customerOrders(email: String!): [Order!]!
 }
 
+# 3. Define mutations
 type Mutation {
-  # 3. Create an order for a single book and a customer (1-click order)
+  # 4a. Create an order for a single book and a customer (1-click order)
   createOrder(customerEmail: String!, bookId: ID!, quantity: Int!): Order!
 
-  # 4. Apply a percentage discount on a book
+  # 4b. Apply a percentage discount on a book
   applyDiscount(bookId: ID!, percentage: Float!): Book!
 }
