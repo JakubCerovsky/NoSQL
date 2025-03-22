@@ -13,7 +13,7 @@ db.createCollection("categories", {
           description: "Description of the category",
         },
         parent_id: {
-          bsonType: "objectId",
+          bsonType: ["objectId", "null"],
           description: "Reference to the parent category",
         },
         sub_categories: {
