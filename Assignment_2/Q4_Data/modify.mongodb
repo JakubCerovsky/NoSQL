@@ -1,32 +1,79 @@
 // Modifying data
 
-// 1. Sell a book to a customer.
+// works 1. Sell a book to a customer.
 
-db.orders.insertOne({
-  customer_id: ObjectId("5f5f3b3b3b3b3b3b3b3b3b3b"), // Correct reference
-  date: new Date(),
-  order_details: [
+// const session = db.getMongo().startSession();
+const ordersCollection = db.orders;
+const customersCollection = db.customers;
+const booksCollection = db.books;
+
+try {
+  session.startTransaction();
+
+  const orderResult = ordersCollection.insertOne(
     {
-      book_id: ObjectId("60d5f3b3b3b3b3b3b3b3b3b3"), // Correct reference
-      quantity: 1,
-      price: 7.99, // Price of a single book
+      customer_id: ObjectId("67e029ae688b6ef4cf9cad0a"), 
+      date: new Date(),
+      order_details: [
+        {
+          book_id: ObjectId("67e027bf688b6ef4cf9cad11"),  
+          quantity: 1,
+          price: NumberDecimal("59.99"), 
+        },
+      ],
+      total_price: NumberDecimal("59.99"),
     },
-  ],
-  total_price: 7.99,
-});
+    { session }
+  );
 
-// 2. Change the address of a customer.
+  const orderId = orderResult.insertedId;
+
+  customersCollection.updateOne(
+    { _id: ObjectId("67e029ae688b6ef4cf9cad0a") },
+    { 
+      $push: { 
+        orders: {
+          order_id: orderId,
+          total_price: NumberDecimal("59.99")
+        }
+      }
+    },
+    { session }
+  );
+
+  booksCollection.updateOne(
+    { _id: ObjectId("67e027bf688b6ef4cf9cad11") },
+    {
+      $inc: {
+        no_of_copies: -1,   
+        sold_copies: 1      
+      }
+    },
+    { session }
+  );
+
+  session.commitTransaction();
+} catch (error) {
+  session.abortTransaction();
+  throw error;
+} finally {
+  session.endSession();
+}
+
+
+
+// works 2. Change the address of a customer.
 
 db.customers.updateOne(
-  { email: "johndoe@example.com" },
-  { $set: { "address.city": "Horsens" } }
+  { email: "alice@example.com" },
+  { $set: { "address.country": "Poland" } }
 );
 
-// 3. Add an author to a book.
+// works 3. Add an author to a book.
 
 db.books.update(
-  { asin: "978-0553293357" }, // Correct reference
-  { $push: { authors: { first_name: "John", last_name: "Doe" } } }
+  { asin: "B0001A1B2C" },
+  { $push: { authors: { first_name: "Johnathan", last_name: "DoeExtraAuthor" } } }
 );
 
 // 4. Retire the "Space Opera" category and assign all books from that category to the parent category. Don't assume you know the id of the parent category.
@@ -72,20 +119,77 @@ try {
 
 // 5. Sell 3 copies of one book and 2 of another in a single order
 
-db.orders.insertOne({
-  customer_id: ObjectId("5f5f3b3b3b3b3b3b3b3b3b3b"), // Correct reference
-  date: new Date(),
-  order_details: [
+// const session = db.getMongo().startSession();
+// const ordersCollection = db.orders;
+// const customersCollection = db.customers;
+// const booksCollection = db.books;
+
+try {
+  session.startTransaction();
+
+  const orderResult = ordersCollection.insertOne(
     {
-      book_id: ObjectId("60d5f3b3b3b3b3b3b3b3b3b3"), // Correct reference
-      quantity: 3,
-      price: 7.99,
+      customer_id: ObjectId("67e029ae688b6ef4cf9cad0a"), 
+      date: new Date(),
+      order_details: [
+        {
+          book_id: ObjectId("67e027bf688b6ef4cf9cad11"),  
+          quantity: 3,
+          price: NumberDecimal("59.99"), 
+        },
+        {
+          book_id: ObjectId("67e027bf688b6ef4cf9cad07"),  
+          quantity: 2,
+          price: NumberDecimal("19.99"),
+        }
+      ],
+      total_price: NumberDecimal("59.99 * 3 + 19.99 * 2"), 
     },
+    { session }
+  );
+
+  const orderId = orderResult.insertedId;
+
+  customersCollection.updateOne(
+    { _id: ObjectId("67e029ae688b6ef4cf9cad0a") },
+    { 
+      $push: { 
+        orders: {
+          order_id: orderId,
+          total_price: NumberDecimal("59.99 * 3 + 19.99 * 2") 
+        }
+      }
+    },
+    { session }
+  );
+
+  booksCollection.updateOne(
+    { _id: ObjectId("67e027bf688b6ef4cf9cad11") },
     {
-      book_id: ObjectId("60d5f3b3b3b3b3b3b3b3b3b4"), // Correct reference
-      quantity: 2,
-      price: 7.99,
+      $inc: {
+        no_of_copies: -3,   
+        sold_copies: 3      
+      }
     },
-  ],
-  total_price: 3 * 7.99 + 2 * 7.99,
-});
+    { session }
+  );
+
+  booksCollection.updateOne(
+    { _id: ObjectId("67e027bf688b6ef4cf9cad07") },
+    {
+      $inc: {
+        no_of_copies: -2,   
+        sold_copies: 2      
+      }
+    },
+    { session }
+  );
+
+  session.commitTransaction();
+} catch (error) {
+  session.abortTransaction();
+  throw error;
+} finally {
+  session.endSession();
+}
+
