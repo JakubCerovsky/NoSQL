@@ -5,11 +5,21 @@
     "description": "Books that involve solving crimes or uncovering secrets.",
     "parent_id": null,
     "sub_categories": [
-      {
-        "parent_id": { "$oid": "603d2f6b7317d312b547c3f7" },
-        "title": "Detective Fiction"
-      }
-    ],
+    {
+      "parent_id": { "$oid": "603d2f6b7317d312b547c3f7" },
+      "title": "Detective Fiction",
+      "sub_categories": [
+        {
+          "parent_id": { "$oid": "603d2f6b7317d312b547c3f7" },
+          "title": "Cozy Mystery"
+        },
+        {
+          "parent_id": { "$oid": "603d2f6b7317d312b547c3f7" },
+          "title": "Police Procedural"
+        }
+      ]
+    }
+  ],
     "books": [
       {
         "book_id": { "$oid": "67e027bf688b6ef4cf9cad07" },

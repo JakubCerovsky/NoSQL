@@ -1,88 +1,160 @@
 // Querying data
 
-// 1. All books by an author
+// works 1. All books by an author
 
 db.books.find({ "authors.first_name": "Isaac", "authors.last_name": "Asimov" });
 
-// 2. Total price of an order
+// works 2. Total price of an order
 
-db.orders
-  .find({ _id: ObjectId("5f5f3b3b3b3b3b3b3b3b3b3b") })
-  .project({ total_price: 1, _id: 0 });
+db.orders.find(
+  { _id: ObjectId("65f8cc7b6e79a8d91d3fab12") }, 
+  { total_price: 1, _id: 0 }
+);
 
-// 3. Total sales (in £) to a customer
+
+// works 3. Total sales (in £) to a customer
 
 db.orders.aggregate([
-  { $match: { customer_id: ObjectId("customer_id_here") } },
+  { $match: { customer_id: ObjectId("67e029ae688b6ef4cf9cad0a") } },
   { $group: { _id: "$customer_id", total_sales: { $sum: "$total_price" } } },
 ]);
 
-// 4. Books that are categorized as neither science fiction nor fantasy  (Note: This is harder than you think. A book can have more categories. Make sure you don’t return books that are fantasy romance, for instance.)
+// works 4. Books that are categorized as neither science fiction nor fantasy  (Note: This is harder than you think. A book can have more categories. Make sure you don’t return books that are fantasy romance, for instance.)
 
 db.books.find({
   "categories.title": { $nin: ["Science Fiction", "Fantasy"] },
 });
 
-// 5. Average page count by genre
+// works 5. Average page count by genre
 
 db.books.aggregate([
   { $unwind: "$genres" },
   { $group: { _id: "$genres", avg_page_count: { $avg: "$page_count" } } },
 ]);
 
-// 6. Categories that have no sub-categories
+// works 6. Categories that have no sub-categories
 
 db.categories.find({ sub_categories: { $exists: true, $size: 0 } });
 
-// 7. ISBN numbers of books with more than one author
+// works 7. ISBN numbers of books with more than one author
 
-db.books.find({ "authors.1": { $exists: true } }).project({ asin: 1, _id: 0 });
+db.books.find(
+  { "authors.1": { $exists: true } },
+  { asin: 1, _id: 0 }
+);
 
-// 8. ISBN numbers of books that sold at least X copies (you decide the value for X)
+// works 8. ISBN numbers of books that sold at least X copies (you decide the value for X)
 
-db.books.find({ sold_copies: { $gte: 100 } }).project({ asin: 1, _id: 0 });
+db.books.find({ sold_copies: { $gte: 100 } }, { asin: 1, _id: 0 });
 
-// 9. Number of copies of each book sold – unsold books should show as 0 sold copies.
 
-db.books.project({ title: 1, sold_copies: 1 });
+// works 9. Number of copies of each book sold – unsold books should show as 0 sold copies.
 
-// 10. Best-selling books: The top 10 selling books ordered in descending order by number of sales.
+db.books.aggregate([
+  {
+    $project: {
+      title: 1,
+      sold_copies: { $ifNull: ["$sold_copies", 0] } 
+    }
+  }
+]);
+
+// works 10. Best-selling books: The top 10 selling books ordered in descending order by number of sales.
 
 db.books.find().sort({ sold_copies: -1 }).limit(10);
 
-// 11. Best-selling genres: The top 3 selling genres ordered in descending order by number of sales.
+// works 11. Best-selling genres: The top 3 selling genres ordered in descending order by number of sales.
 
-db.books.aggregate([
-  { $unwind: "$genres" },
-  { $group: { _id: "$genres", total_sold: { $sum: "$sold_copies" } } },
-  { $sort: { total_sold: -1 } },
-  { $limit: 3 },
-]);
+db.books.find({}, { title: 1, sold_copies: 1 }) 
+  .sort({ sold_copies: -1 }) 
+  .limit(3);
 
-// Note: In the next three exercises, subcategories of science fiction also count as science fiction, and so do subcategories of subcategories, and so on. It’s not enough to just look for the science fiction category.
+// Note: In the next three exercises, subcategories of Mystery also count as Mystery, and so do subcategories of subcategories, and so on. 
+// It’s not enough to just look for the Mystery category.
 
-// 12. All science fiction books. Note: Books in science fiction subcategories like cyberpunk also count as science fiction. Don’t use your knowledge of the concrete category structure. (Depending on the model you might want to use $graphLookup)
+// works 12. All Mystery books. Note: Books in Mystery subcategories like "Cozy Mystery" also count as Mystery.
+//  Don’t use your knowledge of the concrete category structure. (Depending on the model you might want to use $graphLookup)
 
-var sciFiCategory = db.categories.findOne({ title: "Science Fiction" });
+var mysteryCategory = db.categories.findOne({ title: "Mystery" });
 
 db.books.aggregate([
   {
     $match: {
-      "categories.category_id": { $in: sciFiCategory.sub_categories },
+      "categories.category_id": { 
+        $in: [mysteryCategory._id] 
+      },
+    },
+  },
+  {
+    $graphLookup: {
+      from: "categories", 
+      startWith: "$categories.category_id", 
+      connectFromField: "category_id", 
+      connectToField: "_id", 
+      as: "all_mystery_categories", 
+      maxDepth: 0, 
+      depthField: "depth", 
+    },
+  },
+  {
+    $unwind: "$all_mystery_categories", 
+  },
+  {
+    $match: {
+      "all_mystery_categories.title": { $in: ["Mystery"] }, 
+    },
+  },
+  {
+    $project: {
+      asin: 1, 
+      title: 1, 
+      _id: 0, 
     },
   },
 ]);
 
-// 13. Characters used in science fiction books.
+
+// works 13. Characters used in Mystery books.
+
+var mysteryCategory = db.categories.findOne({ title: "Mystery" });
 
 db.books.aggregate([
   {
-    $match: { "categories.category_id": { $in: sciFiCategory.sub_categories } },
+    $match: {
+      "categories.category_id": { 
+        $in: [mysteryCategory._id] 
+      },
+    },
   },
-  { $project: { characters: 1, _id: 0 } },
+  {
+    $graphLookup: {
+      from: "categories",
+      startWith: "$categories.category_id",
+      connectFromField: "category_id",
+      connectToField: "_id",
+      as: "all_mystery_categories",
+      maxDepth: 0,
+      depthField: "depth",
+    },
+  },
+  {
+    $unwind: "$all_mystery_categories",
+  },
+  {
+    $match: {
+      "all_mystery_categories.title": { $in: ["Mystery"] },
+    },
+  },
+  {
+    $project: {
+      characters: 1,
+      _id: 0,
+    },
+  },
 ]);
 
-// 14. For each category: Number of books in the category including books in its subcategories.
+
+// works 14. For each category: Number of books in the category including books in its subcategories.
 
 db.categories.aggregate([
   {

@@ -52,6 +52,80 @@
       ],
       "genres": ["Technology", "Education", "Machine Learning"],
       "characters": []
+    },
+    {
+      "_id": {
+        "$oid": "67e027bf688b6ef4cf9cad11"
+      },
+      "asin": "B0003B2C4D",
+      "title": "Advanced Machine Learning Techniques",
+      "description": "A comprehensive guide to advanced techniques and algorithms in machine learning, written by two experts in the field.",
+      "language": "English",
+      "publish_date": {
+        "$date": "2022-11-20T00:00:00.000Z"
+      },
+      "publisher": "Tech Books",
+      "page_count": 500,
+      "no_of_copies": 200,
+      "sold_copies": 150,
+      "price": {
+        "$numberDecimal": "59.99"
+      },
+      "authors": [
+        {
+          "first_name": "Emily",
+          "last_name": "Johnson",
+          "biography": "A renowned researcher and author in the field of artificial intelligence and machine learning."
+        },
+        {
+          "first_name": "Michael",
+          "last_name": "Brown",
+          "biography": "An expert in deep learning and neural networks with over 20 years of experience in academia and industry."
+        }
+      ],
+      "categories": [
+        {
+          "category_id": {
+            "$oid": "603d2f6b7317d312b547c3f8"
+          },
+          "title": "Technology"
+        }
+      ],
+      "genres": [
+        "Technology",
+        "Education",
+        "Machine Learning"
+      ],
+      "characters": []
+    },
+    {
+      "_id": { "$oid": "67e027bf688b6ef4cf9cad12" },
+      "asin": "B0002B3C4D",
+      "title": "The Secret of the Old Bookshop",
+      "description": "A lighthearted mystery set in a cozy bookshop, where the protagonist solves a small-town crime.",
+      "language": "English",
+      "publish_date": { "$date": "2021-06-15T00:00:00.000Z" },
+      "publisher": "Cozy Reads Publishing",
+      "page_count": 250,
+      "no_of_copies": 200,
+      "sold_copies": 120,
+      "price": { "$numberDecimal": "15.99" },
+      "authors": [
+        {
+          "first_name": "Jane",
+          "last_name": "Doe",
+          "biography": "A cozy mystery author known for creating charming, small-town crime stories."
+        }
+      ],
+      "categories": [
+        {
+          "category_id": { "$oid": "603d2f6b7317d312b547c3f7" },
+          "title": "Cozy Mystery"
+        }
+      ],
+      "genres": ["Mystery", "Cozy Mystery", "Crime"],
+      "characters": ["Emma Blake", "Detective Harper"]
     }
+     
   ]
   
