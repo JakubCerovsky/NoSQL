@@ -95,7 +95,7 @@ db.createCollection("books", {
           bsonType: "array",
           items: {
             bsonType: "string",
-            description: "Genres related to the book",
+            description: "List of genres related to the book",
           },
         },
         characters: {

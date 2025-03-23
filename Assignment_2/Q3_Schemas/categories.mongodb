@@ -33,6 +33,41 @@ db.createCollection("categories", {
             },
           },
         },
+        book_count: {
+          bsonType: "int",
+          description: "Number of books in the category",
+        },
+        books: {
+          bsonType: "array",
+          items: {
+            bsonType: "object",
+            required: ["book_id", "title"],
+            properties: {
+              book_id: {
+                bsonType: "objectId",
+                description: "Reference to a book in this category",
+              },
+              title: {
+                bsonType: "string",
+                description: "Title of the book",
+              },
+            },
+          },
+        },
+        genres: {
+          bsonType: "array",
+          items: {
+            bsonType: "string",
+          },
+          description: "Genres associated with this category",
+        },
+        characters: {
+          bsonType: "array",
+          items: {
+            bsonType: "string",
+          },
+          description: "Characters appearing in books under this category",
+        },
       },
     },
   },

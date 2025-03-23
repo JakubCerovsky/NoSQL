@@ -1,27 +1,36 @@
 [
-    {
-      "customer_id": "603d2f6b7317d312b547c3fb",
-      "date": "2025-03-21T00:00:00Z",
-      "total_price": 39.98,
-      "order_details": [
-        {
-          "book_id": "603d2f6b7317d312b547c3fc",
-          "quantity": 2,
-          "price": 19.99
-        }
-      ]
-    },
-    {
-      "customer_id": "603d2f6b7317d312b547c3fd",
-      "date": "2025-03-20T00:00:00Z",
-      "total_price": 99.98,
-      "order_details": [
-        {
-          "book_id": "603d2f6b7317d312b547c3fe",
-          "quantity": 2,
-          "price": 49.99
-        }
-      ]
-    }
-  ]
-  
+  {
+    "_id": { "$oid": "65f8cc7b6e79a8d91d3fab11" },
+    "customer_id": { "$oid": "67e029ae688b6ef4cf9cad0a" },
+    "date": { "$date": "2024-03-01T14:30:00Z" },
+    "total_price": { "$numberDecimal": "69.98" },
+    "order_details": [
+      {
+        "book_id": { "$oid": "67e027bf688b6ef4cf9cad07" },
+        "title": "The Adventure of Sherlock Holmes",
+        "quantity": 2,
+        "price": { "$numberDecimal": "19.99" }
+      },
+      {
+        "book_id": { "$oid": "67e027bf688b6ef4cf9cad08" },
+        "title": "Introduction to Machine Learning",
+        "quantity": 1,
+        "price": { "$numberDecimal": "49.99" }
+      }
+    ]
+  },
+  {
+    "_id": { "$oid": "65f8cc7b6e79a8d91d3fab12" },
+    "customer_id": { "$oid": "67e029ae688b6ef4cf9cad0b" },
+    "date": { "$date": "2024-03-02T10:15:00Z" },
+    "total_price": { "$numberDecimal": "19.99" },
+    "order_details": [
+      {
+        "book_id": { "$oid": "67e027bf688b6ef4cf9cad07" },
+        "title": "The Adventure of Sherlock Holmes",
+        "quantity": 1,
+        "price": { "$numberDecimal": "19.99" }
+      }
+    ]
+  }
+]

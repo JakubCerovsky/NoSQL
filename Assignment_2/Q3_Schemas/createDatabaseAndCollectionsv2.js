@@ -99,7 +99,7 @@ db.createCollection("books", {
           bsonType: "array",
           items: {
             bsonType: "string",
-            description: "Genres related to the book",
+            description: "List of genres related to the book",
           },
         },
         characters: {
@@ -113,6 +113,7 @@ db.createCollection("books", {
     },
   },
 });
+db.books.createIndex({ asin: 1 }, { unique: true });
 
 // Customers Collection
 db.createCollection("customers", {
@@ -177,6 +178,7 @@ db.createCollection("customers", {
     },
   },
 });
+db.customers.createIndex({ email: 1 }, { unique: true });
 
 // Orders Collection
 db.createCollection("orders", {
@@ -224,6 +226,8 @@ db.createCollection("orders", {
   },
 });
 
+db.orders.createIndex({ customer_id: 1 });
+
 // Categories Collection
 db.createCollection("categories", {
   validator: {
@@ -231,7 +235,10 @@ db.createCollection("categories", {
       bsonType: "object",
       required: ["title", "parent_id"],
       properties: {
-        title: { bsonType: "string", description: "Title of the category" },
+        title: {
+          bsonType: "string",
+          description: "Title of the category",
+        },
         description: {
           bsonType: "string",
           description: "Description of the category",
@@ -257,7 +264,44 @@ db.createCollection("categories", {
             },
           },
         },
+        book_count: {
+          bsonType: "int",
+          description: "Number of books in the category",
+        },
+        books: {
+          bsonType: "array",
+          items: {
+            bsonType: "object",
+            required: ["book_id", "title"],
+            properties: {
+              book_id: {
+                bsonType: "objectId",
+                description: "Reference to a book in this category",
+              },
+              title: {
+                bsonType: "string",
+                description: "Title of the book",
+              },
+            },
+          },
+        },
+        genres: {
+          bsonType: "array",
+          items: {
+            bsonType: "string",
+          },
+          description: "Genres associated with this category",
+        },
+        characters: {
+          bsonType: "array",
+          items: {
+            bsonType: "string",
+          },
+          description: "Characters appearing in books under this category",
+        },
       },
     },
   },
 });
+
+db.categories.createIndex({ title: 1 }, { unique: true });

@@ -1,51 +1,37 @@
 [
-    {
-      "_id": { "$oid": "603d2f6b7317d312b547c3f7" },
-      "title": "Fiction",
-      "description": "Books that contain content based on imaginary events and people.",
-      "parent_id": null,
-      "sub_categories": [
-        {
-          "parent_id": { "$oid": "603d2f6b7317d312b547c3f7" },
-          "title": "Mystery"
-        },
-        {
-          "parent_id": { "$oid": "603d2f6b7317d312b547c3f7" },
-          "title": "Fantasy"
-        }
-      ]
-    },
-    {
-      "_id": { "$oid": "603d2f6b7317d312b547c3f8" },
-      "title": "Non-Fiction",
-      "description": "Books that are based on real facts and information.",
-      "parent_id": null,
-      "sub_categories": [
-        {
-          "parent_id": { "$oid": "603d2f6b7317d312b547c3f8" },
-          "title": "Biography"
-        },
-        {
-          "parent_id": { "$oid": "603d2f6b7317d312b547c3f8" },
-          "title": "Self-Help"
-        }
-      ]
-    },
-    {
-      "_id": { "$oid": "603d2f6b7317d312b547c3f9" },
-      "title": "Technology",
-      "description": "Books related to technology, including computer science and engineering.",
-      "parent_id": null,
-      "sub_categories": [
-        {
-          "parent_id": { "$oid": "603d2f6b7317d312b547c3f9" },
-          "title": "Programming"
-        },
-        {
-          "parent_id": { "$oid": "603d2f6b7317d312b547c3f9" },
-          "title": "Machine Learning"
-        }
-      ]
-    }
-  ]
-  
+  {
+    "_id": { "$oid": "603d2f6b7317d312b547c3f7" },
+    "title": "Mystery",
+    "description": "Books that involve solving crimes or uncovering secrets.",
+    "parent_id": null,
+    "sub_categories": [
+      {
+        "parent_id": { "$oid": "603d2f6b7317d312b547c3f7" },
+        "title": "Detective Fiction"
+      }
+    ],
+    "books": [
+      {
+        "book_id": { "$oid": "67e027bf688b6ef4cf9cad07" },
+        "title": "The Adventure of Sherlock Holmes"
+      }
+    ],
+    "genres": ["Mystery", "Detective", "Crime"],
+    "characters": ["Sherlock Holmes", "Dr. Watson"]
+  },
+  {
+    "_id": { "$oid": "603d2f6b7317d312b547c3f8" },
+    "title": "Technology",
+    "description": "Books that discuss modern technological advancements.",
+    "parent_id": null,
+    "sub_categories": [],
+    "books": [
+      {
+        "book_id": { "$oid": "67e027bf688b6ef4cf9cad08" },
+        "title": "Introduction to Machine Learning"
+      }
+    ],
+    "genres": ["Technology", "Education", "Machine Learning"],
+    "characters": []
+  }
+]
