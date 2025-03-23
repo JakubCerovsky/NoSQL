@@ -34,5 +34,24 @@
         "total_price": { "$numberDecimal": "19.99" }
       }
     ]
+  },
+  {
+    "_id": { "$oid": "67e029ae688b6ef4cf9cad0c" },
+    "email": "carol@example.com",
+    "first_name": "Carol",
+    "last_name": "Davis",
+    "address": {
+      "country": "UK",
+      "city": "London",
+      "street": "Baker Street",
+      "house_no": "221B",
+      "post_no": "NW1 6XE"
+    },
+    "orders": [
+      {
+        "order_id": { "$oid": "65f8cc7b6e79a8d91d3fab13" },
+        "total_price": { "$numberDecimal": "89.97" }
+      }
+    ]
   }
 ]
