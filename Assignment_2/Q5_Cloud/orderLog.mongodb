@@ -1,14 +1,8 @@
-/* global use, db */
-// MongoDB Playground
-// Use Ctrl+Space inside a snippet or a string literal to trigger completions.
-
 const database = "amazon_bookstore_mongov2";
 const collection = "orderLog";
 
-// The current database to use.
 use(database);
 
-// Create a new collection.
 db.createCollection(collection);
 
 exports = async function (changeEvent) {

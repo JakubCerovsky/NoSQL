@@ -1,10 +1,6 @@
-/* global use, db */
-// MongoDB Playground
-// Use Ctrl+Space inside a snippet or a string literal to trigger completions.
-
+// Used for Questions 3 and 5
 const database = "amazon_bookstore_mongov2";
 
-// The current database to use.
 use(database);
 
 // Books Collection
@@ -113,7 +109,6 @@ db.createCollection("books", {
     },
   },
 });
-db.books.createIndex({ asin: 1 }, { unique: true });
 
 // Customers Collection
 db.createCollection("customers", {
@@ -178,7 +173,6 @@ db.createCollection("customers", {
     },
   },
 });
-db.customers.createIndex({ email: 1 }, { unique: true });
 
 // Orders Collection
 db.createCollection("orders", {
@@ -225,8 +219,6 @@ db.createCollection("orders", {
     },
   },
 });
-
-db.orders.createIndex({ customer_id: 1 });
 
 // Categories Collection
 db.createCollection("categories", {
@@ -305,3 +297,6 @@ db.createCollection("categories", {
 });
 
 db.categories.createIndex({ title: 1 }, { unique: true });
+db.orders.createIndex({ customer_id: 1 });
+db.customers.createIndex({ email: 1 }, { unique: true });
+db.books.createIndex({ asin: 1 }, { unique: true });
