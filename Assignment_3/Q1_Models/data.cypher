@@ -57,8 +57,8 @@ CREATE
 (character1)<-[:contains]-(book1),
 (character2)<-[:contains]-(book2),
 
-// Categories and parent relationship
-(cat1:Category {title: "Fiction", description: "Fictional books"})-[:parents]->(cat1),
+// Categories and parent relationship (fixed!)
+(cat1:Category {title: "Fiction", description: "Fictional books"}),
 (cat2:Category {title: "Sci-Fi", description: "Science fiction genre"})-[:parents]->(cat1),
 
 (book1)-[:belongs_to]->(cat2),
