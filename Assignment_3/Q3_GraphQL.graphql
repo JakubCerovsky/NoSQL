@@ -1,0 +1,120 @@
+# 1.	Create a schema definition in GraphQL Definition Language for your data model
+# 2.	Add relationships (@relationship) to connect it to the data model
+
+type Book {
+  title: String
+  description: String
+  language: String
+  publish_date: Date
+  publisher: String
+  page_count: Int
+  no_of_copies: Int
+  price: Float
+  asin: ID
+
+  belongsToGenre: [Genre] @relationship(type: "belongs_to", direction: OUT)
+  belongsToCategory: [Category]
+    @relationship(type: "belongs_to", direction: OUT)
+  containsCharacter: [Character] @relationship(type: "contains", direction: OUT)
+  authorWrites: [Author] @relationship(type: "writes", direction: IN)
+  orderContains: [Order]
+    @relationship(type: "contains", direction: IN, properties: "Contains")
+}
+
+type Author {
+  first_name: String
+  last_name: String
+  biography: String
+
+  writesBook: [Book] @relationship(type: "writes", direction: OUT)
+}
+
+type Genre {
+  name: String
+
+  bookBelongsTo: [Book] @relationship(type: "belongs_to", direction: IN)
+}
+
+type Character {
+  name: String
+
+  bookContains: [Book] @relationship(type: "contains", direction: IN)
+}
+
+type Category {
+  title: String
+  description: String
+
+  bookBelongsTo: [Book] @relationship(type: "belongs_to", direction: IN)
+  parentsCategory: Category @relationship(type: "parents", direction: OUT)
+  categoryParents: [Category] @relationship(type: "parents", direction: IN)
+}
+
+type Customer {
+  email: ID
+  first_name: String
+  last_name: String
+  country: String
+  city: String
+  street: String
+  house_no: String
+  post_no: String
+
+  makesOrder: [Order] @relationship(type: "makes", direction: OUT)
+}
+
+type Order {
+  id: ID
+  date: Date
+  total_price: Float
+
+  customerMakes: Customer @relationship(type: "makes", direction: IN)
+  containsBook: [Book]
+    @relationship(type: "contains", direction: OUT, properties: "Contains")
+}
+
+interface Contains {
+  quantity: Int
+  price: Float
+}
+
+# 3.	Define queries in the Query type:
+
+type Query {
+  # 3a.	Given a search term, all books that have the search term as part of the title or has the search term as part of the author names
+  searchBooks(search: String!): [Book]
+    @cypher(
+      statement: """
+      MATCH (b:Book)
+      OPTIONAL MATCH (b)<-[:writes]-(a:Author)
+      WHERE toLower(b.title) CONTAINS toLower($search)
+         OR toLower(a.first_name + ' ' + a.last_name) CONTAINS toLower($search)
+      RETURN DISTINCT b
+      """
+    )
+
+  # 3b.	Given the email of a customer and the name of a genre, all orders from the customer that contain any books from the genre
+  customerOrdersByGenre(email: String!, genreName: String!): [Order]
+    @cypher(
+      statement: """
+      MATCH (c:Customer {email: $email})-[:makes]->(o:Order)-[r:contains]->(b:Book)-[:belongs_to]->(g:Genre {name: $genreName})
+      RETURN DISTINCT o
+      """
+    )
+
+  # All books in a category and its subcategories (recursive)
+  booksInCategoryAndSubcategories(categoryTitle: String!): [Book]
+    @cypher(
+      statement: """
+      MATCH (c:Category {title: $categoryTitle})
+      CALL {
+        WITH c
+        MATCH (c)-[:parents*0..]->(sub:Category)
+        RETURN collect(sub) AS categories
+      }
+      UNWIND categories AS cat
+      MATCH (b:Book)-[:belongs_to]->(cat)
+      RETURN DISTINCT b
+      """
+    )
+}
