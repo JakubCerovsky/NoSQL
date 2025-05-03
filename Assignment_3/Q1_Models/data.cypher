@@ -1,14 +1,13 @@
 // Clean database
-MATCH (n) DETACH DELETE n;
+// MATCH (n) DETACH DELETE n;
 
 // Constraints
 CREATE CONSTRAINT book_asin_unique IF NOT EXISTS FOR (b:Book) REQUIRE b.asin IS UNIQUE;
 CREATE CONSTRAINT order_id_unique IF NOT EXISTS FOR (o:Order) REQUIRE o.id IS UNIQUE;
 CREATE CONSTRAINT customer_email_unique IF NOT EXISTS FOR (c:Customer) REQUIRE c.email IS UNIQUE;
 
-
-CREATE
 // Author
+CREATE
 (author:Author {
   first_name: "Isaac",
   last_name: "Asimov",
@@ -57,7 +56,7 @@ CREATE
 (character1)<-[:contains]-(book1),
 (character2)<-[:contains]-(book2),
 
-// Categories and parent relationship (fixed!)
+// Categories and parent relationship
 (cat1:Category {title: "Fiction", description: "Fictional books"}),
 (cat2:Category {title: "Sci-Fi", description: "Science fiction genre"})-[:parents]->(cat1),
 
