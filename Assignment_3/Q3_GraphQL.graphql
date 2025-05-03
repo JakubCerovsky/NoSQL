@@ -1,75 +1,76 @@
 # 1.	Create a schema definition in GraphQL Definition Language for your data model
 # 2.	Add relationships (@relationship) to connect it to the data model
+# https://www.graphql-js.org/docs/basic-types/
 
 type Book {
-  title: String
+  title: String!
   description: String
   language: String
   publish_date: Date
   publisher: String
   page_count: Int
-  no_of_copies: Int
-  price: Float
-  asin: ID
+  no_of_copies: Int!
+  price: Float!
+  asin: ID!
 
   belongsToGenre: [Genre] @relationship(type: "belongs_to", direction: OUT)
   belongsToCategory: [Category]
     @relationship(type: "belongs_to", direction: OUT)
   containsCharacter: [Character] @relationship(type: "contains", direction: OUT)
-  authorWrites: [Author] @relationship(type: "writes", direction: IN)
+  authorWrites: [Author!]! @relationship(type: "writes", direction: IN)
   orderContains: [Order]
     @relationship(type: "contains", direction: IN, properties: "Contains")
 }
 
 type Author {
-  first_name: String
-  last_name: String
+  first_name: String!
+  last_name: String!
   biography: String
 
-  writesBook: [Book] @relationship(type: "writes", direction: OUT)
+  writesBook: [Book!] @relationship(type: "writes", direction: OUT)
 }
 
 type Genre {
-  name: String
+  name: String!
 
-  bookBelongsTo: [Book] @relationship(type: "belongs_to", direction: IN)
+  bookBelongsTo: [Book!] @relationship(type: "belongs_to", direction: IN)
 }
 
 type Character {
-  name: String
+  name: String!
 
-  bookContains: [Book] @relationship(type: "contains", direction: IN)
+  bookContains: [Book!] @relationship(type: "contains", direction: IN)
 }
 
 type Category {
-  title: String
+  title: String!
   description: String
 
-  bookBelongsTo: [Book] @relationship(type: "belongs_to", direction: IN)
+  bookBelongsTo: [Book!] @relationship(type: "belongs_to", direction: IN)
   parentsCategory: Category @relationship(type: "parents", direction: OUT)
   categoryParents: [Category] @relationship(type: "parents", direction: IN)
 }
 
 type Customer {
-  email: ID
-  first_name: String
-  last_name: String
-  country: String
-  city: String
-  street: String
-  house_no: String
-  post_no: String
+  email: ID!
+  first_name: String!
+  last_name: String!
+  country: String!
+  city: String!
+  street: String!
+  house_no: String!
+  post_no: String!
 
   makesOrder: [Order] @relationship(type: "makes", direction: OUT)
 }
 
 type Order {
-  id: ID
-  date: Date
-  total_price: Float
+  id: ID!
+  date: Date!
+  total_price: Float!
 
-  customerMakes: Customer @relationship(type: "makes", direction: IN)
-  containsBook: [Book]
+  customerMakes: Customer! @relationship(type: "makes", direction: IN)
+  containsBook: [Book!]!
     @relationship(type: "contains", direction: OUT, properties: "Contains")
 }
 
@@ -79,6 +80,7 @@ interface Contains {
 }
 
 # 3.	Define queries in the Query type:
+# https://neo4j.com/docs/graphql/7/directives/custom-logic/#_cypher
 
 type Query {
   # 3a.	Given a search term, all books that have the search term as part of the title or has the search term as part of the author names
@@ -102,7 +104,7 @@ type Query {
       """
     )
 
-  # All books in a category and its subcategories (recursive)
+  # 3c. Given the name of a category, all books in the category, its subcategories and their subcategories and so on
   booksInCategoryAndSubcategories(categoryTitle: String!): [Book]
     @cypher(
       statement: """
@@ -115,6 +117,113 @@ type Query {
       UNWIND categories AS cat
       MATCH (b:Book)-[:belongs_to]->(cat)
       RETURN DISTINCT b
+      """
+    )
+
+  # 3d. List all books that have never been part of any order.
+  unboughtBooks: [Book]
+    @cypher(
+      statement: """
+      MATCH (b:Book)
+      WHERE NOT (b)<-[:contains]-(:Order)
+      RETURN b
+      """
+    )
+
+  # 3e. Return the top N books that appear most in orders.
+  topSellingBooks(limit: Int!): [Book]
+    @cypher(
+      statement: """
+      MATCH (:Order)-[r:contains]->(b:Book)
+      WITH b, SUM(r.quantity) AS totalSold
+      RETURN b ORDER BY totalSold DESC LIMIT $limit
+      """
+    )
+}
+
+# 4. Define mutations in the Mutation type:
+
+input OrderItemInput {
+  asin: ID!
+  quantity: Int!
+  price: Float!
+}
+
+input GenreBookInput {
+  name: String!
+  asins: [ID!]!
+}
+
+type Mutation {
+  # 4a. Create an order for one book and customer (1-click)
+  createOneClickOrder(email: String!, asin: ID!, quantity: Int!): Order!
+    @cypher(
+      statement: """
+      MATCH (c:Customer {email: $email})
+      MATCH (b:Book {asin: $asin})
+      WITH c, b, quantity, b.price * quantity AS total
+      CREATE (o:Order {id: randomUUID(), date: date(), total_price: total})
+      CREATE (c)-[:makes]->(o)
+      CREATE (o)-[:contains {quantity: quantity, price: b.price}]->(b)
+      RETURN o
+      """
+    )
+
+  # 4b. Create an order for many books and one customer
+  createBulkOrder(email: String!, items: [OrderItemInput!]!): Order!
+    @cypher(
+      statement: """
+      MATCH (c:Customer {email: $email})
+      WITH c, $items AS books
+      WITH c, [item IN books |
+        item.quantity * item.price] AS totals,
+        books
+      WITH c, reduce(t = 0.0, n IN totals | t + n) AS total_price,
+        books
+      CREATE (o:Order {id: randomUUID(), date: date(), total_price: total_price})
+      CREATE (c)-[:makes]->(o)
+      UNWIND books AS item
+      MATCH (b:Book {asin: item.asin})
+      CREATE (o)-[:contains {quantity: item.quantity, price: item.price}]->(b)
+      RETURN o
+      """
+    )
+
+  # 4c. Apply x% price reduction to all books by an author
+  discountBooksByAuthor(
+    first_name: String!
+    last_name: String!
+    percent: Float!
+  ): [Book]
+    @cypher(
+      statement: """
+      MATCH (a:Author {first_name: $first_name, last_name: $last_name})-[:writes]->(b:Book)
+      SET b.price = b.price * (1 - $percent / 100)
+      RETURN b
+      """
+    )
+
+  # 4d. Clean up the catalog by deleting unsellable books.
+  deleteOutOfStockBooks: Int
+    @cypher(
+      statement: """
+      MATCH (b:Book)
+      WHERE b.no_of_copies = 0
+      DETACH DELETE b
+      RETURN count(b)
+      """
+    )
+
+  # 4e. Create a new genre and assign books to it
+  createGenreWithBooks(input: GenreBookInput!): Genre
+    @cypher(
+      statement: """
+      CREATE (g:Genre {name: $input.name})
+      WITH g
+      UNWIND $input.asins AS asin
+      MATCH (b:Book {asin: asin})
+      CREATE (b)-[:belongs_to]->(g)
+      RETURN g
       """
     )
 }
