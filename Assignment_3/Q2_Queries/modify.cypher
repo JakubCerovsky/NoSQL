@@ -1,11 +1,12 @@
 // Modifying data
 
 // 1.	Sell a book to a customer.
-MATCH (c:Customer {email: "john.doe@example.com"}), (b:Book {asin: "B001"})
-CREATE (o:Order {id: "ORD11", date: date("2025-05-03"), total_price: b.price}),
-       (c)-[:makes]->(o),
-       (o)-[:contains {quantity: 1, price: b.price}]->(b)
-SET b.no_of_copies = b.no_of_copies - 1;
+MATCH (cust:Customer {email: "john.doe@example.com"}), (b:Book {asin: "B001"})
+CREATE (o:Order {id: "ORD11", date: date("2025-05-03")}),
+       (cust)-[:makes]->(o),
+       (o)-[rel:contains {quantity: 1, price: b.price}]->(b)
+SET b.no_of_copies = b.no_of_copies - 1,
+    o.total_price = rel.quantity * rel.price;
 
 // 2.	Change the address of a customer.
 MATCH (c:Customer {email: "jane.smith@example.com"})
@@ -28,9 +29,10 @@ DELETE r;
 MATCH (c:Customer {email: "alice.brown@example.com"}), 
       (b1:Book {asin: "B004"}), 
       (b2:Book {asin: "B005"})
-CREATE (o:Order {id: "ORD12", date: date("2025-05-03"), total_price: 3 * b1.price + 2 * b2.price}),
+CREATE (o:Order {id: "ORD12", date: date("2025-05-03")}),
        (c)-[:makes]->(o),
-       (o)-[:contains {quantity: 3, price: b1.price}]->(b1),
-       (o)-[:contains {quantity: 2, price: b2.price}]->(b2)
+       (o)-[rel1:contains {quantity: 3, price: b1.price}]->(b1),
+       (o)-[rel2:contains {quantity: 2, price: b2.price}]->(b2)
 SET b1.no_of_copies = b1.no_of_copies - 3,
-    b2.no_of_copies = b2.no_of_copies - 2;
+    b2.no_of_copies = b2.no_of_copies - 2,
+    o.total_price = rel1.quantity * rel1.price + rel2.quantity * rel2.price;

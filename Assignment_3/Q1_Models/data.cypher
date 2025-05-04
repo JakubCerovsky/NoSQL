@@ -6,6 +6,8 @@ CREATE CONSTRAINT book_asin_unique IF NOT EXISTS FOR (b:Book) REQUIRE b.asin IS 
 CREATE CONSTRAINT order_id_unique IF NOT EXISTS FOR (o:Order) REQUIRE o.id IS UNIQUE;
 CREATE CONSTRAINT customer_email_unique IF NOT EXISTS FOR (c:Customer) REQUIRE c.email IS UNIQUE;
 
+SHOW CONSTRAINTS;
+
 CREATE
 // Authors
 (author1:Author {first_name: "John", last_name: "Doe", biography: "Bestselling fiction writer"}),
@@ -142,22 +144,27 @@ CREATE
 (order1:Order {id: "ORD1", date: "2023-01-15"}), (cust1)-[:makes]->(order1),
 (order2:Order {id: "ORD2", date: "2023-02-10"}), (cust2)-[:makes]->(order2),
 (order3:Order {id: "ORD3", date: "2023-03-05"}), (cust3)-[:makes]->(order3),
-(order4:Order {id: "ORD4", date: "2023-04-12"}), (cust4)-[:makes]->(order4),
+(order4:Order {id: "ORD4", date: "2023-04-12"}), (cust3)-[:makes]->(order4),
 (order5:Order {id: "ORD5", date: "2023-05-20"}), (cust5)-[:makes]->(order5),
 (order6:Order {id: "ORD6", date: "2023-06-25"}), (cust6)-[:makes]->(order6),
-(order7:Order {id: "ORD7", date: "2023-07-08"}), (cust7)-[:makes]->(order7),
+(order7:Order {id: "ORD7", date: "2023-07-08"}), (cust5)-[:makes]->(order7),
 (order8:Order {id: "ORD8", date: "2023-08-30"}), (cust8)-[:makes]->(order8),
 (order9:Order {id: "ORD9", date: "2023-09-18"}), (cust9)-[:makes]->(order9),
 (order10:Order {id: "ORD10", date: "2023-10-05"}), (cust10)-[:makes]->(order10),
 
 // Order contents
-(order1)-[:contains {quantity: 2}]->(book1),
-(order2)-[:contains {quantity: 1}]->(book2),
-(order3)-[:contains {quantity: 2}]->(book3),
-(order4)-[:contains {quantity: 4}]->(book3),
-(order5)-[:contains {quantity: 1}]->(book5),
-(order6)-[:contains {quantity: 4}]->(book6),
-(order7)-[:contains {quantity: 2}]->(book6),
-(order8)-[:contains {quantity: 3}]->(book2),
-(order9)-[:contains {quantity: 1}]->(book9),
-(order10)-[:contains {quantity: 1}]->(book10);
+(order1)-[:contains {quantity: 2, price: book1.price}]->(book1),
+(order2)-[:contains {quantity: 1, price: book2.price}]->(book2),
+(order3)-[:contains {quantity: 2, price: book3.price}]->(book3),
+(order4)-[:contains {quantity: 4, price: book3.price}]->(book3),
+(order5)-[:contains {quantity: 1, price: book5.price}]->(book5),
+(order6)-[:contains {quantity: 4, price: book6.price}]->(book6),
+(order7)-[:contains {quantity: 2, price: book6.price}]->(book6),
+(order8)-[:contains {quantity: 3, price: book2.price}]->(book2),
+(order9)-[:contains {quantity: 1, price: book9.price}]->(book9),
+(order10)-[:contains {quantity: 1, price: book10.price}]->(book10);
+
+// After all creates
+MATCH (o:Order)-[r:contains]->(b:Book)
+WITH o, SUM(r.quantity * r.price) AS total
+SET o.total_price = total;
