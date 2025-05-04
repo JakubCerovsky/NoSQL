@@ -2,6 +2,7 @@
 
 // 1.	Sell a book to a customer.
 MATCH (cust:Customer {email: "john.doe@example.com"}), (b:Book {asin: "B001"})
+WHERE b.no_of_copies >= 1
 CREATE (o:Order {id: "ORD11", date: date("2025-05-03")}),
        (cust)-[:makes]->(o),
        (o)-[rel:contains {quantity: 1, price: b.price}]->(b)
