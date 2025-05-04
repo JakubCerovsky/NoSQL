@@ -29,6 +29,7 @@ DELETE r;
 MATCH (c:Customer {email: "alice.brown@example.com"}), 
       (b1:Book {asin: "B004"}), 
       (b2:Book {asin: "B005"})
+WHERE b1.no_of_copies >= 3 AND b2.no_of_copies >= 2
 CREATE (o:Order {id: "ORD12", date: date("2025-05-03")}),
        (c)-[:makes]->(o),
        (o)-[rel1:contains {quantity: 3, price: b1.price}]->(b1),
